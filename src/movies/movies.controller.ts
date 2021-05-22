@@ -1,6 +1,6 @@
 import { Controller, Delete, Get, Param, Post, Patch, Body, Query } from '@nestjs/common';
-import { query } from 'express';
-
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+@ApiTags('movies')
 @Controller('movies')
 export class MoviesController {
     @Get()
@@ -22,9 +22,15 @@ export class MoviesController {
     }
 
     @Post()
-    create(@Body() movieData: JSON){
+    @ApiOperation({ summary: 'Create Movie' })
+    @ApiResponse({ status: 403, description: 'Forbidden.' })
+    create(@Body() movieData: string){
         console.log(movieData)
-        return "This will create a Movie"
+        return {movieData} // "This will create a Movie"
+    }
+
+    private newMethod() {
+        return 'Create Movie';
     }
 
     @Delete('/:id')
@@ -33,10 +39,9 @@ export class MoviesController {
     }
 
     @Patch('/:id')
-    petch(@Param('id') movieId: string, @Body() updateData: JSON){
+    petch(@Param('id') movieId: string, @Body() updateData: string){
         return {
             updateId : movieId,
-            ...
             updateData
         }
     }
