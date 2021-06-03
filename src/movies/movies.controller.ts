@@ -1,11 +1,25 @@
 import { Controller, Delete, Get, Param, Post, Patch, Body, Query } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-@ApiTags('movies')
+import { ApiBearerAuth, ApiHeader, ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+
+@ApiBearerAuth()
+@ApiHeader({
+    name: 'x-access-key',
+    description: 'Custom header'
+  })
+@ApiHeader({
+    name: 'x-signature',
+    description: 'Custom header'
+  })
+  @ApiHeader({
+    name: 'x-timestemp',
+    description: 'Custom header',
+  })
+@ApiTags('Movies')
 @Controller('movies')
 export class MoviesController {
     @Get()
-    getAllMoveis(){
-        return "All Movies"
+    getAllMovies(){
+        return "All Movies object"
     }
 
     @Get('search')
@@ -24,13 +38,10 @@ export class MoviesController {
     @Post()
     @ApiOperation({ summary: 'Create Movie' })
     @ApiResponse({ status: 403, description: 'Forbidden.' })
+    @ApiResponse({ status: 201, description: 'The record has been successfully created.'})
     create(@Body() movieData: string){
         console.log(movieData)
         return {movieData} // "This will create a Movie"
-    }
-
-    private newMethod() {
-        return 'Create Movie';
     }
 
     @Delete('/:id')
