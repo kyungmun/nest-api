@@ -1,8 +1,14 @@
+import { IsString } from 'class-validator';
 
 export class CreateSblDto {
-    value : string;
-    type : string;
-    spec_version : string;
+    @IsString()
+    readonly value : string;
+
+    @IsString()
+    readonly type : string;
+
+    @IsString()
+    readonly spec_version : string;
 }
 
 /*

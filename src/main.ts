@@ -6,7 +6,11 @@ import { ArgumentOutOfRangeError } from 'rxjs';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  //app.useGlobalPipes( new ValidationPipe())
+  app.useGlobalPipes( new ValidationPipe({
+      transform: true
+    })
+  );
+
   const config = new DocumentBuilder()
     .setTitle('OPEN API')
     .setDescription('Kyungmun API description')

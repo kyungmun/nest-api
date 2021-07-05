@@ -20,7 +20,7 @@ export class SblService {
     }
 
     getOneByIP(ip : string): Sbl {
-        const sbl = this.sbls.find(sbl => sbl.value == ip);
+        const sbl = this.sbls.find(sbl => sbl.value === ip);
         if (!sbl) {
             throw new NotFoundException(`Sbl with id ${ip} not found`);
         }
@@ -29,17 +29,17 @@ export class SblService {
 
     deleteOne(id : string) {
         this.getOne(id);
-        this.sbls = this.sbls.filter(sbl => sbl.id != id);
+        this.sbls = this.sbls.filter(sbl => sbl.id !== id);
     }
 
     deleteOneByIP(ip : string) {
         this.getOneByIP(ip);
-        this.sbls = this.sbls.filter(sbl => sbl.value != ip);
+        this.sbls = this.sbls.filter(sbl => sbl.value !== ip);
     }
 
 
     create(sblData: CreateSblDto){
-        const sbl = this.sbls.find(sbl => sbl.value == sblData.value);
+        const sbl = this.sbls.find(sbl => sbl.value === sblData.value);
         if (sbl) {
             throw new ConflictException(`Sbl exists ip ${sblData.value}`);
         }
