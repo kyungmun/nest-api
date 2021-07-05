@@ -1,6 +1,9 @@
 import { Controller, Delete, Get, Param, Post, Patch, Body, Query } from '@nestjs/common';
-import { ApiBearerAuth, ApiHeader, ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-
+import { ApiBearerAuth, ApiHeader, ApiTags, ApiOperation, ApiResponse, ApiCreatedResponse } from '@nestjs/swagger';
+import { CreateMovieDto } from './dto/create.movie.dto';
+import { UpdateMovieDto } from './dto/update.movie.dto';
+import { Movie } from './entities/movie.entity';
+import { MoviesService } from './movies.service';
 @ApiBearerAuth()
 @ApiHeader({
     name: 'x-access-key',
@@ -11,15 +14,19 @@ import { ApiBearerAuth, ApiHeader, ApiTags, ApiOperation, ApiResponse } from '@n
     description: 'Custom header'
   })
   @ApiHeader({
-    name: 'x-timestemp',
+    name: 'x-timestamp',
     description: 'Custom header',
   })
 @ApiTags('Movies')
 @Controller('movies')
 export class MoviesController {
+    constructor(
+        private readonly moviesService : MoviesService
+    ){}
+
     @Get()
-    getAllMovies(){
-        return "All Movies object"
+    getAllMovies() : Movie[]{
+        return this.moviesService.getAll();
     }
 
     @Get('search')
@@ -31,30 +38,35 @@ export class MoviesController {
     }
 
     @Get('/:id')
-    getOne(@Param('id') movieId :string){
-        return `This One Movie ID ${movieId}`
+    getOne(@Param('id') movieId :number): Movie{
+        console.log(movieId)
+        return this.moviesService.getOne(movieId);
     }
 
     @Post()
     @ApiOperation({ summary: 'Create Movie' })
     @ApiResponse({ status: 403, description: 'Forbidden.' })
     @ApiResponse({ status: 201, description: 'The record has been successfully created.'})
-    create(@Body() movieData: string){
+    @ApiCreatedResponse({
+        description: 'The record has been successfully created.',
+        type: String,
+      })
+    create(@Body() movieData: CreateMovieDto){
         console.log(movieData)
-        return {movieData} // "This will create a Movie"
+        return this.moviesService.create(movieData); // "This will create a Movie"
     }
 
     @Delete('/:id')
-    delete(@Param('id') movieId: string){
-        return `This Delete a Movie ID ${movieId}`
+    delete(@Param('id') movieId: number){
+        return this.moviesService.deleteOne(movieId);
     }
 
     @Patch('/:id')
-    petch(@Param('id') movieId: string, @Body() updateData: string){
-        return {
-            updateId : movieId,
+    petch(@Param('id') movieId: number, @Body() updateData: UpdateMovieDto){
+        return this.moviesService.update(
+            movieId,
             updateData
-        }
+        );
     }
     
 }
