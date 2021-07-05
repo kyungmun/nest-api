@@ -1,12 +1,17 @@
-import { IsString } from 'class-validator';
+
+import { ApiProperty } from '@nestjs/swagger';
+import { IsString, IsUUID, IsOptional } from 'class-validator';
 
 export class CreateSblDto {
+    @ApiProperty()
     @IsString()
     readonly value : string;
 
+    @ApiProperty()
     @IsString()
     readonly type : string;
 
+    @ApiProperty()
     @IsString()
     readonly spec_version : string;
 }

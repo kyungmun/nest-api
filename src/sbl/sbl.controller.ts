@@ -53,8 +53,10 @@ export class SblController {
         type: String,
       })
     create(@Body() sblData: CreateSblDto){
-        console.log(sblData)
-        return this.sblService.create(sblData) // "This will create a sbl result"
+        console.log(sblData) 
+        const result = this.sblService.create(sblData) // "This will create a sbl result"
+        console.log(result);
+        return result;
     }
 
     @Delete('/:ip')

@@ -31,23 +31,25 @@ export class SblService {
         this.getOne(id);
         this.sbls = this.sbls.filter(sbl => sbl.id !== id);
     }
-
+   
     deleteOneByIP(ip : string) {
         this.getOneByIP(ip);
         this.sbls = this.sbls.filter(sbl => sbl.value !== ip);
     }
+    
 
-
-    create(sblData: CreateSblDto){
+    create(sblData: CreateSblDto): Sbl{
         const sbl = this.sbls.find(sbl => sbl.value === sblData.value);
         if (sbl) {
             throw new ConflictException(`Sbl exists ip ${sblData.value}`);
         }
         
-        var idValue = this.sbls.length + 1;
+        let idValue = uuidv4();
         this.sbls.push({
-            id: uuidv4(), // idValue.toString(),
+            id: idValue,
             ...sblData,
         });
+        //return Sbl sbl = Sbl.of(sblData)
+        return {id : idValue, value : sblData.value, type : sblData.type, spec_version : sblData.spec_version};
     }
 }
